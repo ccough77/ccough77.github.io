@@ -1,5 +1,0 @@
-install.packages("skimr")
-install.packages("ggthemes")
-install.packages("hrbrthemes")
-install.packages("DT")
-

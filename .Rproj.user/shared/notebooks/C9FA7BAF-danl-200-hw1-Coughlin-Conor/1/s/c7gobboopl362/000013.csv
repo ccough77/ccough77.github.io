@@ -1,0 +1,4 @@
+"0","temp_C <- 5/9*(temp_F-32)
+"
+"2","Error: object 'temp_F' not found
+"

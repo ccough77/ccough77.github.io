@@ -46,21 +46,21 @@
     "href": "index.html",
     "title": "Conor Coughlin",
     "section": "",
-    "text": "Finley Malloc majors in Data Analytics at SUNY Geneseo. When not working on data analytics, Finley enjoys spending time unicycling and playing with her pet iguana."
+    "text": "Conor Coughlin is currently undecided in his major at SUNY Geneseo though is looking into business and looking to open his own restaurant one day. In Conor’s free time he enjoys, reading, playing video games, and talking with his friends and family."
   },
   {
     "objectID": "index.html#education",
     "href": "index.html#education",
     "title": "Conor Coughlin",
     "section": "Education",
-    "text": "Education\nState University of New York at Geneseo | Geneseo, NY  B.S. in Data Analytics | Aug 2022 - May 2026  Minor in Business Administration"
+    "text": "Education\nState University of New York at Geneseo | Geneseo, NY  Graduated at Athena High School | Greece, NY  Expected Graduation at SUNY Geneseo | May 2027"
   },
   {
     "objectID": "index.html#experience",
     "href": "index.html#experience",
     "title": "Conor Coughlin",
     "section": "Experience",
-    "text": "Experience\nStarbucks Analytics | Data Analyst Intern | May 2024 - Aug 2024"
+    "text": "Experience\nGreece Little League Cashier | May 2021 - July 2021 | Dishwasher and Line cook - Riccis Family Restaurant | July 2021 - July 2023 |"
   },
   {
     "objectID": "blog-listing.html",
@@ -152,5 +152,19 @@
     "title": "Welcome To My Blog",
     "section": "",
     "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "danl-200-lec-07-2024-0213.html",
+    "href": "danl-200-lec-07-2024-0213.html",
+    "title": "R Basics",
+    "section": "",
+    "text": "Code\npath &lt;- \"https://bcdanl.github.io/data/tips_seaborn.csv\"\ntips &lt;- read.csv(path)\n\nDT::datatable(tips)\n\n\n\n\n\n\n\nCode\nskimr::skim(tips)\n\n\n\nData summary\n\n\nName\ntips\n\n\nNumber of rows\n244\n\n\nNumber of columns\n7\n\n\n_______________________\n\n\n\nColumn type frequency:\n\n\n\ncharacter\n4\n\n\nnumeric\n3\n\n\n________________________\n\n\n\nGroup variables\nNone\n\n\n\nVariable type: character\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmin\nmax\nempty\nn_unique\nwhitespace\n\n\n\n\nsex\n0\n1\n4\n6\n0\n2\n0\n\n\nsmoker\n0\n1\n2\n3\n0\n2\n0\n\n\nday\n0\n1\n3\n4\n0\n4\n0\n\n\ntime\n0\n1\n5\n6\n0\n2\n0\n\n\n\nVariable type: numeric\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nskim_variable\nn_missing\ncomplete_rate\nmean\nsd\np0\np25\np50\np75\np100\nhist\n\n\n\n\ntotal_bill\n0\n1\n19.79\n8.90\n3.07\n13.35\n17.8\n24.13\n50.81\n▃▇▃▁▁\n\n\ntip\n0\n1\n3.00\n1.38\n1.00\n2.00\n2.9\n3.56\n10.00\n▇▆▂▁▁\n\n\nsize\n0\n1\n2.57\n0.95\n1.00\n2.00\n2.0\n3.00\n6.00\n▇▂▂▁▁\n\n\n\n\n\n\n\nCode\nlibrary(tidyverse)\nmpg &lt;- mpg\n?mpg\n\nggplot(data = mpg) + \n  geom_point(mapping = aes(x = displ,\n                           y = hwy))"
+  },
+  {
+    "objectID": "danl-200-lec-07-2024-0213.html#question-1",
+    "href": "danl-200-lec-07-2024-0213.html#question-1",
+    "title": "R Basics",
+    "section": "2.1 Question 1",
+    "text": "2.1 Question 1\n\n\nCode\n#1a\nggplot(data = mpg)\n\n\n\n\n\nCode\nggplot(data = mpg) +\n  geom_point(mapping = aes(x = hwy, y = cyl))"
   }
 ]
