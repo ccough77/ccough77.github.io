@@ -21,7 +21,7 @@ about:
       
     - icon: file-earmark-pdf
       text: Resumé
-      href: https://GITHUB_USERNAME.github.io/resume-example.pdf
+      href: https://ccough77.github.io/Resume.pdf
       
     - icon: mailbox
       text: Email
