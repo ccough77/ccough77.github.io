@@ -1,0 +1,5 @@
+"0","flights <- nycflights13::flights"
+"0",""
+"0","df_worst <- flights |> "
+"0","  group_by(year, month, day) |> "
+"0","  filter(dense_rank(-arr_delay) <= 10)"

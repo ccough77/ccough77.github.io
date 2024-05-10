@@ -1,0 +1,134 @@
+---
+title: Lecture XXXX - Note    # e.g., Lecture 10 - Note
+subtitle: SOME TOPICS  # e.g., Aesthetic Mappings; Facets; Geometric Objects 
+author: 
+  - name: YOUR NAME   # e.g., Byeong-Hak Choe
+date: last-modified   # e.g., 2024-02-29
+
+execute: 
+  echo: true        # true false
+  eval: true        # true false
+  warning: false    # true false
+  message: false    # true false
+  fig-width: 9
+  # fig-height: 5
+  
+format: 
+  html:
+    toc: true                # true false
+    number-sections: true    # true false
+    code-fold: false         # true false show   # https://quarto.org/docs/output-formats/html-code.html
+    code-tools: true         # true false
+    highlight-style: a11y          # a11y arrow ayu atom-one breeze github gruvbox tango espresso
+                                   # pygments tango espresso espresso zenburn kate nord
+                                   # https://quarto.org/docs/output-formats/html-code.html#highlighting
+---
+
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(skimr)
+library(hrbrthemes)
+library(DT)
+library(rmarkdown)
+
+```
+
+#Lecture 21
+##Classwork 10 
+###Q2e
+```{r}
+nvda <- read_csv("https://bcdanl.github.io/data/NVDA.csv")
+```
+
+
+#Lecture 19 Cont.
+##Factor
+```{r}
+df <- data.frame(
+  city = c("Rochester", "Buffalo", 
+           "Geneseo", "Syracus"),
+  income = c(80,  82,  70, 75) )
+
+df <- df |> 
+  mutate( city_fct = factor(city) )
+
+df$city
+df$city_fct
+```
+
+##Factor with Levels
+```{r}
+NY_cities <- c("Geneseo", "Rochester", 
+               "Buffalo", "Syracus")
+df <- df |> 
+  mutate(city_fct_new = 
+           factor(city, 
+                  levels = NY_cities))
+  
+levels(df$city_fct)
+levels(df$city_fct_new)
+```
+
+```{r}
+ggplot(df) +
+  geom_point(aes(x = income, y = city))
+```
+
+```{r}
+ggplot(df) +
+  geom_point(aes(x = income, y = city_fct_new))
+```
+
+##'fct_reorder()'
+```{r}
+df <- df |> 
+  mutate(city_by_income = 
+           fct_reorder(city_fct,
+                       income))
+
+df$city_by_income
+```
+
+```{r}
+ggplot(df,
+       aes(x = income, y = city_by_income)) +
+  geom_point()
+```
+
+```{r}
+ggplot(df,
+       aes(x = income, y = city_by_income)) +
+  geom_bar(stat = "identity")
+```
+
+##Classwork 10 cont.
+###Q2f
+
+Provide the R code to create a "dotplot" that displays the values of "country", sorted by "lifeExp" within each "continent" for the year "2007".
+
+```{r}
+library(gapminder)
+gapminder <- gapminder::gapminder
+```
+
+```{r}
+gapminder_2007 <- gapminder |> 
+  filter(year == 2007)
+
+length(unique(gapminder_2007$country))
+
+gapminder_2007 <- gapminder_2007 |> 
+  mutate(country_by_life = fct_reorder(country,
+                                       lifeExp))
+```
+
+```{r}
+ggplot(gapminder_2007) +
+  aes(x = lifeExp,
+      y = country_by_life) + 
+  geom_point() + 
+  facet_wrap(continent ~ .,
+             scales = "free_y")
+```

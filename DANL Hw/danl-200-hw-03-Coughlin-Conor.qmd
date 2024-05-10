@@ -1,0 +1,262 @@
+---
+title: Homework 3
+subtitle: Data Visualization Basics
+date: last-modified
+from: markdown+emoji
+comments: false
+
+execute: 
+  warning: false
+  message: false
+  fig-width: 9
+  fig-height: 7
+  fig-align: center
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(skimr)
+library(rmarkdown)
+```
+
+# Direction
+
+- Download the Homework 3 Quarto document, `danl-200-hw-03-q.qmd`, by clicking [this link](https://drive.google.com/file/d/1s7pm4yzumOQDKWJudPYUaQRICRbEaem_/view?usp=share_link).
+
+- Provide both your answer to each question in **Homework 3** in the `danl-200-hw-03-q.qmd`.
+
+- Please submit your **Quarto document for Homework 3** to the Brightspace with the name below:
+
+  - `danl-200-hw3-LASTNAME-FIRSTNAME.qmd`\
+  ( e.g., `danl-200-hw3-choe-byeonghak.qmd` )
+
+- The due is March 27, 2024, 11:59 P.M.
+
+- Please send an email to Byeong-Hak (`bchoe@geneseo.edu`) if you have any questions or clarifications.
+
+<br><br><br>
+
+
+
+# Customer Data with Health Insurance
+
+Read the data file, `custdata_rev.csv`, as the data.frame object with the name, `health_cust`:
+
+```{r}
+#| echo: true
+library(tidyverse)
+library(skimr)
+
+health_cust <- read_csv(
+  'https://bcdanl.github.io/data/custdata_rev.csv'
+)
+```
+
+
+```{r}
+#| echo: false
+#| eval: true
+
+rmarkdown::paged_table(health_cust)
+```
+
+<br>
+
+## Variable Description for `health_cust`
+
+The following describes the variables  in the `health_cust` data.frame.
+
+- `custid`: ID of customer
+- `sex`: Sex
+- `is_employed`: Employment status
+  - `NA`: Unknown or not applicable
+  - `TRUE`: Employed
+  - `FALSE`: Unemployed
+- `income`: Income (in $)
+- `marital_status`: Marital status
+- `housing_type`: Housing type
+- `recent_move`: 
+  - `TRUE`: Recently moved
+  - `FALSE`: Not recently moved
+- `age`: Age
+- `state_of_res`: State of residence
+- `gas_usage`: Gas usage
+  - `NA`: Unknown or not applicable
+  - `001`: Included in rent or condo fee
+  - `002`: Included in electricity payment
+  - `003`: No charge or gas not used
+  - `004`-`999`: $4 to $999 (rounded and top-coded)
+- `health_ins`: Health insuarance status
+  - `TRUE`: customer with health insuarance 
+  - `FALSE`: customer without health insuarance 
+
+<br><br>
+
+## Question 1 
+Report summary statistics including a mean value for each logical variable in `health_cust`.
+
+*Answer*:
+```{r}
+skimr::skim(health_cust)
+view(health_cust)
+```
+
+<br><br>
+
+
+
+
+
+## Question 2 
+Use `health_cust` data.frame to create a new data.frame, `health_cust2`, in which 
+(1) `age` is greater than 0 and less than 100; and
+(2) `income` is positive.
+
+*Answer*:
+```{r}
+health_cust2 <- read.csv('https://bcdanl.github.io/data/custdata_rev.csv')
+
+```
+
+<br><br>
+
+
+
+
+
+## Question 3
+Provide both ggplot code and comments to describe the distribution of `income`.
+
+*Answer*:
+```{r}
+ggplot(data = health_cust) +
+  geom_point(mapping = 
+               aes(x = income,
+                   y = custid,
+             color = income))
+
+#Almost all of the income for the group shown below is in the around of $250000 showing that 
+```
+
+<br><br>
+
+
+
+
+
+## Question 4
+Provide both ggplot code and comments to describe the distribution of `marital_status`.
+
+*Answer*:
+```{r}
+ggplot(data = health_cust) +
+  geom_bar(mapping = 
+             aes(x = marital_status,
+                 color = marital_status),
+           group = 1)
+
+# Martial status is dominantly showing married people with people that have never been married as a second place, the assumed reason as to why married is the greatest statistic is that people who go to doctors and get healthcare are older and have been married for a time, and the group of never married could be those young and not old enough to be married e.g. children, or older people that never decided to marry
+```
+
+<br><br>
+
+
+
+
+
+## Question 5
+- Suppose you randomly pick one customer's observation from each state in data.frame `health_cust`.
+
+- Use ggplot code to determine (1) the state where a customer is most probable to possess health insurance; and (2) the state where it is least probable for a customer to have health insurance.
+
+*Answer*:
+```{r}
+ggplot(data = health_cust) +
+  geom_bar(mapping = 
+             aes(x = state_of_res,
+                 fill = state_of_res))
+           position = "stack"
+
+# By the bar plot shown below it is most likely that California has the most amount of people with insurance due to their higher population, though in that same aspect Wyoming is most probable to have the least amount of people with insurance due to their low population and lack of people going to health centers
+```
+
+<br><br>
+
+
+
+
+
+## Question 6
+Provide both ggplot code and comments to describe the relationship between `age` and `income`.
+
+
+*Answer*:
+```{r}
+ggplot(data = health_cust) +
+  geom_point(mapping = 
+               aes(x = age,
+                   y = income))
+
+# A great amount of the data points are in the area of $0-250000, while the ages around these groups are between 25 and 95, the former being that of people who have good jobs that pay well, and the older group who possibly have retired and have a good income from the jobs that they had worked in the past
+```
+
+<br><br>
+
+
+
+
+## Question 7
+Provide both ggplot code and comments to describe how the distribution of `age` varies by `health_ins`.
+
+*Answer*:
+```{r}
+ggplot(data = health_cust) +
+  geom_point(mapping = aes(x = age,
+                           y = health_ins))
+
+# As shown by the graph, people around the age of 25 to 75 have health insurance but it also shows more people of the age 25 to 85 that do not have health insurance, showing that age has a variable between 25-85 for people that both do and do not have health insurance
+```
+
+<br><br>
+
+
+
+
+## Question 8
+Provide both ggplot code and comments to describe how the distribution of `marital_status` varies `health_ins`.
+
+*Answer*:
+```{r}
+ggplot(data = health_cust,
+  mapping = aes(x = marital_status, y = health_ins,
+                color = marital_status)) +
+  geom_point(alpha = .5)
+               facet_wrap(. ~ age, nrow = 4)
+               
+#The graph as shows is that it is equal as the number of people that have health insurance, though it would be reasonable to believe that the people that have the most health insurance to be those that are married and have a family, this would be because if something were to happen they would want to leave people with something or have help getting better
+```
+
+<br><br>
+
+
+
+
+
+## Question 9
+Provide both ggplot code and comments to describe how the distribution of `marital_status` varies by `housing_type`.
+
+*Answer*:
+```{r}
+ggplot(data = health_cust,
+  mapping = aes(x = marital_status, y = housing_type,
+                color = marital_status)) +
+  geom_point(alpha = .5)
+
+#Most people that are married are homeowner with mortgage/loan, with very few of any category being a homeowner free and clear, though most people that have never married are renting a place
+```
+
+<br><br>
+
+
+

@@ -22,8 +22,8 @@ website:
 format:
   html:
     theme: 
-      light: quartz
-      dark: sandstone
+      light: dusk
+      dark: charcoal
     mainfont: system-ui; 
     highlight-style: atom-one
     css: styles.css

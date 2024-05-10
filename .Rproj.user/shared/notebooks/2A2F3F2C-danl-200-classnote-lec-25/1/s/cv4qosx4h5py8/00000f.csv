@@ -1,0 +1,4 @@
+"0","by_dest_sd <- not_cancelled |> "
+"0","  group_by(dest) |> "
+"0","  summarize(dist_sd = sd(distance)) |> "
+"0","  arrange(desc(dist_sd))"

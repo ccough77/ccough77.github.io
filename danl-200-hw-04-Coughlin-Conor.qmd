@@ -1,0 +1,254 @@
+---
+title: Homework 4
+subtitle: Data Visualization and Data Transformation
+date: last-modified
+from: markdown+emoji
+comments: false
+code-fold: false
+
+execute: 
+  warning: false
+  message: false
+  fig-width: 9
+  fig-height: 7
+  fig-align: center
+---
+```{r}
+#| eval: true
+#| include: false
+
+library(tidyverse)
+library(skimr)
+```
+
+# Direction
+
+- Download the Homework 4 Quarto document, `danl-200-hw-04-q.qmd`, by clicking [this link](https://drive.google.com/file/d/1NT5nKWEjwi536RYxIkoZrdUVfDzllA54/view?usp=share_link).
+
+- Provide both your answer to each sub question in **Question 1 of Homework 4** in the `danl-200-hw-04-q.qmd`.
+
+- Please submit your **Quarto document for Question 1 of Homework 4** to the Brightspace with the name below:
+
+  - `danl-200-hw4-LASTNAME-FIRSTNAME.qmd`\
+  ( e.g., `danl-200-hw4-choe-byeonghak.qmd` )
+
+- The due is April 30, 2024, 11:59 P.M.
+
+- Please send an email to Byeong-Hak (`bchoe@geneseo.edu`) if you have any questions or clarifications.
+
+<br><br><br>
+
+## Question 1
+
+Load the data.frame for Question 1.
+
+```{r}
+#| echo: true
+#| eval: true
+restaurant <- read_csv('https://bcdanl.github.io/data/DOHMH_NYC_Restaurant_Inspection.csv')
+```
+
+```{r}
+#| results: asis
+#| echo: false
+rmarkdown::paged_table(restaurant)
+```
+
+### Variable Description
+
+-   `CAMIS`:
+    -   This is an unique identifier for the entity (restaurant);
+    -   10-digit integer
+-   `DBA`:
+    -   This field represents the name (doing business as) of the entity (restaurant);
+    -   Public business name, may change at discretion of restaurant owner
+-   `BORO`:
+    -   Borough in which the entity (restaurant) is located.;
+    -   • `1` = MANHATTAN
+    -   • `2` = BRONX
+    -   • `3` = BROOKLYN
+    -   • `4` = QUEENS
+    -   • `5` = STATEN ISLAND
+    -   • `0` = Missing;
+-   `CUISINE DESCRIPTION`:
+    -   This field describes the entity (restaurant) cuisine.
+-   `ACTION`:
+    -   This field represents the actions that is associated with each restaurant inspection. ;
+    -   • Violations were cited in the following area(s).
+    -   • No violations were recorded at the time of this inspection.
+    -   • Establishment re-opened by DOHMH
+    -   • Establishment re-closed by DOHMH
+    -   • Establishment Closed by DOHMH.
+    -   • Violations were cited in the following area(s) and those requiring immediate action were addressed.
+-   `VIOLATION CODE`:
+    -   Violation code associated with an establishment (restaurant) inspection
+-   `VIOLATION DESCRIPTION`:
+    -   Violation description associated with an establishment (restaurant) inspection
+-   `CRITICAL FLAG`:
+    -   Indicator of critical violation;
+    -   • `Critical`
+    -   • `Not Critical`
+    -   • `Not Applicable`;
+    -   Critical violations are those most likely to contribute to food-borne illness
+-   `SCORE`:
+    -   Total score for a particular inspection;
+-   `GRADE`:
+    -   Grade associated with the inspection;
+    -   • `N` = Not Yet Graded
+    -   • `A` = Grade A
+    -   • `B` = Grade B
+    -   • `C` = Grade C
+    -   • `Z` = Grade Pending
+    -   • `P` = Grade Pending issued on re-opening following an initial inspection that resulted in a closure
+
+<br><br>
+
+### Q1a.
+
+What are the mean, standard deviation, first quartile, median, third quartile, and maximum of `SCORE` for each `GRADE` of restaurants?
+
+*Answer*:
+```{r}
+skim(restaurant)
+```
+
+<br><br>
+
+### Q1b.
+
+- How many restaurants with a `GRADE` of `A` are there in each `BORO` in NYC?
+
+*Answer*:
+```{r}
+Q1b <- restaurant |> 
+  select(GRADE, 
+         BORO) |> 
+  arrange(GRADE)
+```
+
+<br>
+
+### Q1c.
+
+- Provide both (1) ggplot code and (2) a simple comment to describe how the distribution of `SCORE` varies by `GRADE` and `CRITICAL FLAG`.
+
+
+
+*Answer*:
+```{r}
+Q1c <- restaurant |> 
+  select(GRADE,
+         SCORE,
+         `CRITICAL FLAG`)
+
+ggplot(Q1c,
+       aes(x = GRADE, 
+           y = 'CRITICAL FLAG')) +
+  geom_point() +
+  facet_wrap(SCORE ~ .)
+
+#The score has higher critical flags for higher grades the higher that it goes, at 0 all A, B, and C grades have critical flags
+```
+
+<br><br>
+
+### Q1d.
+
+Provide both (1) ggplot code and (2) a simple comment to describe how the proportion of `CRITICAL FLAG` varies by `GRADE` and `BORO`.
+
+
+*Answer*:
+```{r}
+Q1d <- restaurant |> 
+  select('CRITICAL FLAG',
+         GRADE,
+         BORO)
+
+ggplot(Q1d,
+       aes(x = GRADE, 
+           y = 'CRITICAL FLAG'),
+       alpha = .01) +
+  geom_point() +
+  facet_wrap(BORO ~ .,
+             scales = "free_x")
+
+# There is a heavy amount of critical flags per Boro for all the grades
+```
+
+<br><br>
+
+### Q1e.
+- Calculate the proportion of restaurants that had violation related to `contamination` or `mice` in each `BORO`.
+
+*Answer*:
+```{r}
+Q1e <- restaurant |> 
+  summarise('MICE', 'CONTAMINATION', BORO)
+```
+
+<br><br>
+
+
+### Q1f.
+
+-   Find the 3 most common names of restaurants (`DBA`) in each `BORO`.
+-   Overall, which `DBA` value is most common in NYC?
+
+
+*Answer*:
+```{r}
+Q1f <- restaurant |> 
+  select(DBA, BORO) |> 
+  group_by(DBA, BORO) |> 
+  summarise(n = n()) |> 
+  arrange(-n)
+
+#The three most common restaurant names are Dunkin, Starbucks, and McDonalds
+```
+
+<br><br>
+
+
+### Q1g.
+
+- Construct a bar chart to display the top 10 names of restaurants (`DBA`) sortetd by the frequency of each name within their respective borough (`BORO`).
+
+
+*Answer*:
+```{r}
+ggplot(Q1f,
+       aes(x = DBA))+
+  geom_bar() +
+  facet_wrap(BORO ~ .,
+             scales = "free_y")
+```
+
+<br><br>
+
+
+### Q1h
+What is your GitHub username?
+
+
+*Answer*:
+```{r}
+ccough77
+```
+
+
+<br><br><br>
+
+## Question 2
+
+- Create a blog post featuring data analysis on the `health_cust` data.frame and publish it on your GitHub website using your Quarto document for Homework 2.
+  - If you have not completed on Homework 2, please take this opportunity to do so.
+
+```{r}
+health_cust <- read_csv(
+  'https://bcdanl.github.io/data/custdata_rev.csv'
+)
+```
+
+
+<br><br>
+

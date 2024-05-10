@@ -1,0 +1,120 @@
+---
+title: Lecture XXXX - Note    # e.g., Lecture 10 - Note
+subtitle: SOME TOPICS  # e.g., Aesthetic Mappings; Facets; Geometric Objects 
+author: 
+  - name: YOUR NAME   # e.g., Byeong-Hak Choe
+date: last-modified   # e.g., 2024-02-29
+
+execute: 
+  echo: true        # true false
+  eval: true        # true false
+  warning: false    # true false
+  message: false    # true false
+  fig-width: 9
+  # fig-height: 5
+  
+format: 
+  html:
+    toc: true                # true false
+    number-sections: true    # true false
+    code-fold: false         # true false show   # https://quarto.org/docs/output-formats/html-code.html
+    code-tools: true         # true false
+    highlight-style: a11y          # a11y arrow ayu atom-one breeze github gruvbox tango espresso
+                                   # pygments tango espresso espresso zenburn kate nord
+                                   # https://quarto.org/docs/output-formats/html-code.html#highlighting
+---
+
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(skimr)
+library(hrbrthemes)
+library(DT)
+library(rmarkdown)
+
+```
+
+##Lecture 19 
+###Mutate
+```{r}
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .before = 1  # try different position numbers.
+  )
+```
+
+```{r}
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .after = day  
+  )
+```
+
+#lead() and lag()
+```{r}
+df <- data.frame( x = 1:10 )
+
+df <- df |> 
+  mutate(x_lag = lag(x),
+         x_lead = lead(x))
+```
+
+```{r}
+df_gdp <- data.frame(
+  Year = 2015:2022,
+  GDP = c(100, 105, 109, 113, 
+          118, 121, 119, 118)) 
+
+df_gdp <- df_gdp |>            
+  mutate(GDP_chg = GDP - lag(GDP),
+         GDP_growth_pct = 
+           100 * GDP_chg/GDP)
+```
+
+#ifelse()
+```{r}
+flight_season <- flights |>
+  select(month) |> 
+  mutate(summer_month = ifelse(month %in% c(6,7,8),
+                               TRUE,
+                               FALSE
+                               )
+         )
+```
+
+#Useful math functions
+```{r}
+df <- data.frame( x = c(1:10) ) |> 
+  mutate(x_log = log(x),
+         x_log10 = log10(x),
+         x_exp = exp(x),
+         x_sqrt = sqrt(x),
+         x_sqrt_round = round(x_sqrt, 2),
+         x_fct = factor(x),
+         x_chr = as.character(x),
+         x_num = as.numeric(x),
+         x_int = as.integer(x) )
+```
+
+#Classwork
+##Q1a
+```{r}
+#1
+q1a_manually <-  flights |> 
+  select(dep_time, dep_delay, arr_time, arr_delay)
+
+#2
+q1a_helper <-  flights |> 
+  select(starts_with("dep_"),
+         starts_with("arr_"))
+
+#3
+q1a_helper2 <-  flights |> 
+  select(ends_with("_time"),
+         ends_with("_delay"))
+```

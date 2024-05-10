@@ -1,0 +1,896 @@
+---
+title: Lecture XXXX - Note    # e.g., Lecture 10 - Note
+subtitle: SOME TOPICS  # e.g., Aesthetic Mappings; Facets; Geometric Objects 
+author: 
+  - name: Conor Coughlin   # e.g., Byeong-Hak Choe
+date: 02-29-2024   # e.g., 2024-02-29
+
+execute: 
+  echo: true        # true false
+  eval: true        # true false
+  warning: false    # true false
+  message: false    # true false
+  fig-width: 9
+  # fig-height: 5
+  
+format: 
+  html:
+    toc: true                # true false
+    number-sections: true    # true false
+    code-fold: false         # true false show   # https://quarto.org/docs/output-formats/html-code.html
+    code-tools: true         # true false
+    highlight-style: a11y          # a11y arrow ayu atom-one breeze github gruvbox tango espresso
+                                   # pygments tango espresso espresso zenburn kate nord
+                                   # https://quarto.org/docs/output-formats/html-code.html#highlighting
+---
+
+
+```{r setup}
+#| include: false
+library(tidyverse)
+library(skimr)
+library(hrbrthemes)
+library(DT)
+library(rmarkdown)
+
+```
+
+# Aesthetic Mappings
+
+- An aesthetic is a visual property (e.g., size, shape, color) of the objects (e.g., class) in our plot.
+  - We can display a point in different ways by changing the values of its aesthetic properties.
+
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = 
+               aes(x = displ, 
+                   y = hwy, 
+                   color = class) )
+```
+
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = 
+               aes(x = displ, 
+                   y = hwy) )
+```
+
+## Overplotting Issues
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping =
+               aes(x = displ, y = hwy,
+                   color = "blue"))
+          shape = 23
+          size = 3
+```
+
+```{r}
+mpg %>% 
+  count(class)
+```
+
+## Classwork 6
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy,
+                           color = as.factor(cty)))
+```
+
+#Q3b
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy),
+             alpha = .33) +
+  facet_grid(drv ~ cyl)
+```
+
+#Q3c
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy),
+             alpha = .33) +
+  facet_grid(drv ~ .)
+```
+
+#Q3d
+
+```{r}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy),
+             alpha = .33) +
+  facet_wrap(. ~ class, nrow = 2)
+```
+
+#Q3e
+
+```{r}
+ggplot(data = tvshows) +
+  geom_point(mapping = aes(x = GRP, y = PE), alpha = .5)
+```
+
+
+#Classwork 7 
+##Q1c - a
+```{r}
+ggplot(data = mpg,
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point(alpha = .5) +
+  geom_smooth(se = FALSE)
+```
+
+#Q1c - B
+```{r}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point(alpha = .3) +
+  geom_smooth(se = FALSE,
+              mapping = aes(group = drv))
+```
+
+#Q1c - C
+```{r}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy, 
+                     color = drv)) +
+  geom_point(alpha = .4) +
+  geom_smooth(se = FALSE)
+```
+
+#Q1c - D
+```{r}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv),
+             alpha = .5) +
+  geom_smooth(se = FALSE)
+```
+
+#Q1c - E
+```{r}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(color = drv),
+             alpha = .5) +
+  geom_smooth(mapping = aes(linetype = drv),
+              se = FALSE)
+```
+
+#Q1c - F
+```{r}
+ggplot(data = mpg, 
+       mapping = aes(x = displ, y = hwy)) +
+  geom_point(color = "White",
+             size = 6) +
+  geom_point(aes(color = drv),
+             alpha = .5)
+```
+
+#Q1d
+```{r}
+organdata_simple <- read_csv('https://bcdanl.github.io/data/organdata_simple.csv')
+```
+
+#Time trend of the distribution of a continous variable
+
+```{r}
+ggplot(data = organdata_simple,
+       aes(x = factor(year),
+           y = donors)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(data = organdata_simple,
+       aes(x = year,
+           y = donor)) +
+  geom_line() +
+  geom_point()  +
+  facet_wrap(country ~ .)
+```
+
+
+#Class 3/26
+##Lecture 15
+```{r}
+library(tidyverse)
+sale_df <- read_csv(
+  "https://bcdanl.github.io/data/home_sales_nyc.csv")
+```
+
+```{r}
+ggplot(sale_df,
+       aes(x = sale.price)) +
+  geom_histogram(bins = 500)
+```
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut))
+```
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = 
+             aes(x = cut, 
+                 color = cut))
+```
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = 
+             aes(x = cut, 
+                 y = stat(prop), 
+                 group = 1))
+```
+
+#Proportion Bar Chart
+```{r}
+ggplot(diamonds,
+       aes(x = cut, y = stat(prop))) +
+  geom_bar()
+```
+
+
+```{r}
+ggplot(data = diamonds) + 
+  stat_summary(
+    mapping = aes(x = cut, y = depth),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+```
+
+#Classwork 7
+##Q2b setup
+```{r}
+library(nycflights13)
+
+flights <- nycflights13::flights
+??flights
+```
+
+#Q2b
+#Option 1 - Bar chart
+```{r}
+ggplot(flights, aes(x = carrier,
+                    fill = carrier)) +
+  geom_bar()
+```
+
+#Option 2 - Proportion Bar Chart
+```{r}
+ggplot(flights, aes(x = carrier,
+                    y = stat(prop),
+                    group = 1)) +
+  geom_bar()
+```
+
+
+#Lecture 18
+##Classwork 9 
+###Q1a
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+flights <- flights
+
+madeup_30 <- flights |>
+  filter(dep_delay >= 60 &
+           dep_delay - arr_delay > 30)
+```
+
+###Q2a
+
+```{r}
+df <- data.frame(num = c(1, 4, NA, 2, NA, 3, 7),
+                 chr = c("A", "A", "A", "B", "X", "Z", "D"))
+```
+
+*Answer*
+```{r}
+df |> 
+  arrange(desc(num)) #or -num
+```
+
+```{r}
+as.numeric(TRUE)
+as.numerica(FALSE)
+```
+
+```{r}
+as.numeric(is.na(df$num))
+```
+
+
+```{r}
+df |>
+  arrange(desc(is.na(num)))
+```
+
+
+
+###Q2b
+
+*Answer*
+```{r}
+most_delayed <-  flights |>
+  arrange(-dep_delay)
+```
+
+###Q2c
+
+*Answer*
+```{r}
+speed <-  flights |> 
+  arrange( - (distance / air_time))
+```
+
+###Q2d
+
+*Answer*
+```{r}
+farthest <- flights |> 
+  arrange(-distance)
+
+shortest <-  flights |>
+  arrange(distance)
+```
+
+# 'select()'
+
+```{r}
+time_var_only <-  flights |> 
+  select(year, month, day) 
+```
+
+```{r}
+flights |> 
+  select(year:carrier)
+```
+
+
+##Lecture 19 
+###Mutate
+```{r}
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .before = 1  # try different position numbers.
+  )
+```
+
+```{r}
+flights |> 
+  mutate(
+    gain = dep_delay - arr_delay,
+    speed = distance / air_time * 60,
+    .after = day  
+  )
+```
+
+#lead() and lag()
+```{r}
+df <- data.frame( x = 1:10 )
+
+df <- df |> 
+  mutate(x_lag = lag(x),
+         x_lead = lead(x))
+```
+
+```{r}
+df_gdp <- data.frame(
+  Year = 2015:2022,
+  GDP = c(100, 105, 109, 113, 
+          118, 121, 119, 118)) 
+
+df_gdp <- df_gdp |>            
+  mutate(GDP_chg = GDP - lag(GDP),
+         GDP_growth_pct = 
+           100 * GDP_chg/GDP)
+```
+
+#ifelse()
+```{r}
+flight_season <- flights |>
+  select(month) |> 
+  mutate(summer_month = ifelse(month %in% c(6,7,8),
+                               TRUE,
+                               FALSE
+                               )
+         )
+```
+
+#Useful math functions
+```{r}
+df <- data.frame( x = c(1:10) ) |> 
+  mutate(x_log = log(x),
+         x_log10 = log10(x),
+         x_exp = exp(x),
+         x_sqrt = sqrt(x),
+         x_sqrt_round = round(x_sqrt, 2),
+         x_fct = factor(x),
+         x_chr = as.character(x),
+         x_num = as.numeric(x),
+         x_int = as.integer(x) )
+```
+
+#Classwork
+##Q1a
+```{r}
+#1
+q1a_manually <-  flights |> 
+  select(dep_time, dep_delay, arr_time, arr_delay)
+
+#2
+q1a_helper <-  flights |> 
+  select(starts_with("dep_"),
+         starts_with("arr_"))
+
+#3
+q1a_helper2 <-  flights |> 
+  select(ends_with("_time"),
+         ends_with("_delay"))
+```
+
+
+#Lecture 20
+##Q1b
+```{r}
+flights <- flights |>
+  rename(air_time_minutes = air_time)
+```
+
+#Q2a
+Currently 'dep_time' and 'sched_dep_time' are convenient to look at, but hard to compute with because their values are represented with format HHMM or HMM (H for hour and M for minute).
+
+Convert them to a more convenient representation of number of minutes since midnight.
+
+#Example of the syntax
+```{r}
+# new_data.frame <- data.frame |> 
+                    # mutate(NEW_VARIABLE_NAME_1 = SOMETHING,
+                            # NEW_VARIABLE_NAME_2 = SOMETHING_2)
+```
+
+```{r}
+q2a <- flights |> 
+  select(dep_time, sched_dep_time, arr_time, sched_arr_time, air_time_minutes, dep_delay) |> 
+  mutate(dep_time_hour = dep_time %/% 100,
+         dep_time_minutes = dep_time %% 100,
+         sched_dep_time_hour = sched_dep_time %/% 100,
+         sched_dep_time_min = sched_dep_time %% 100,
+         arr_time_hour = arr_time %/% 100,
+         arr_time_min = arr_time %% 100) |>
+  mutate(dep_time = dep_time_hour * 60 + dep_time_minutes,
+         sched_dep_time = sched_dep_time_hour * 60 + sched_dep_time_min,
+         arr_time = arr_time_hour * 60 + arr_time_min)
+```
+
+#Q2b
+```{r}
+q2b <- q2a |> 
+  mutate(diff = arr)
+```
+
+#Q2c
+```{r}
+q2c <- q2a |> 
+  mutate(dep_delay_manual = dep_time - sched_dep_time,
+         .after = dep_delay) |> 
+  mutate(TF = dep_delay_manual == dep_delay,
+         .before = dep_delay)
+```
+
+#Q2d
+```{r}
+q2d_dense <-  flights |> 
+  select(dep_delay, carrier) |> 
+  arrange(-dep_delay) |> 
+  mutate(ran_min = min_rank(-dep_delay),
+         rank_den = dense_rank(-dep_delay),
+         rank_row = row_number(-dep_delay)) |> 
+  filter(rank_den <= 20)
+
+q2d_min <-  flights |> 
+  select(dep_delay, carrier) |> 
+  arrange(-dep_delay) |> 
+  mutate(ran_min = min_rank(-dep_delay),
+         rank_den = dense_rank(-dep_delay),
+         rank_row = row_number(-dep_delay)) |> 
+  filter(rank_min <= 20)
+```
+
+#Q2e
+```{r}
+q2e <- nvda |> 
+  mutate(chg_close = Close - lag(Close),
+         .after = Close)
+```
+
+
+#Lecture 21
+##Classwork 10 
+###Q2e
+```{r}
+nvda <- read_csv("https://bcdanl.github.io/data/NVDA.csv")
+```
+
+
+#Lecture 19 Cont.
+##Factor
+```{r}
+df <- data.frame(
+  city = c("Rochester", "Buffalo", 
+           "Geneseo", "Syracus"),
+  income = c(80,  82,  70, 75) )
+
+df <- df |> 
+  mutate( city_fct = factor(city) )
+
+df$city
+df$city_fct
+```
+
+##Factor with Levels
+```{r}
+NY_cities <- c("Geneseo", "Rochester", 
+               "Buffalo", "Syracus")
+df <- df |> 
+  mutate(city_fct_new = 
+           factor(city, 
+                  levels = NY_cities))
+  
+levels(df$city_fct)
+levels(df$city_fct_new)
+```
+
+```{r}
+ggplot(df) +
+  geom_point(aes(x = income, y = city))
+```
+
+```{r}
+ggplot(df) +
+  geom_point(aes(x = income, y = city_fct_new))
+```
+
+##'fct_reorder()'
+```{r}
+df <- df |> 
+  mutate(city_by_income = 
+           fct_reorder(city_fct,
+                       income))
+
+df$city_by_income
+```
+
+```{r}
+ggplot(df,
+       aes(x = income, y = city_by_income)) +
+  geom_point()
+```
+
+```{r}
+ggplot(df,
+       aes(x = income, y = city_by_income)) +
+  geom_bar(stat = "identity")
+```
+
+##Classwork 10 cont.
+###Q2f
+
+Provide the R code to create a "dotplot" that displays the values of "country", sorted by "lifeExp" within each "continent" for the year "2007".
+
+```{r}
+library(gapminder)
+gapminder <- gapminder::gapminder
+```
+
+```{r}
+gapminder_2007 <- gapminder |> 
+  filter(year == 2007)
+
+length(unique(gapminder_2007$country))
+
+gapminder_2007 <- gapminder_2007 |> 
+  mutate(country_by_life = fct_reorder(country,
+                                       lifeExp))
+```
+
+```{r}
+ggplot(gapminder_2007) +
+  aes(x = lifeExp,
+      y = country_by_life) + 
+  geom_point() + 
+  facet_wrap(continent ~ .,
+             scales = "free_y")
+```
+
+
+##Lecture 22
+###Classwork 10 cont.
+####Q2g
+```{r}
+korea <- gapminder |> 
+  filter(str_detect(country, "Korea"))
+```
+
+#Summarize()
+```{r}
+df <- data_frame(x = c(1:10))
+df_sum <- df |> 
+  mutate(x_mean = mean(x),
+            x_sd = sd(x),
+            x_min = min(x),
+            x_median = median(x),
+            x_q1 = quantile(x, prob = .75),
+            x_max = max(x))
+```
+
+```{r}
+df <- data.frame(
+  group = c("A", "B", "A", "B"),
+  score = c(50, 65, 70, 85)
+)
+
+df |> 
+  group_by(group) |> 
+  summarize(mean_val = mean(score))
+```
+
+```{r}
+library(nycflights13)
+
+df_dep_delay <- flights |> 
+  summarize(dep_delay_mean = mean(dep_delay),
+            dep_delay_mean_rmNA = mean(dep_delay, na.rm = T))
+```
+
+```{r}
+by_day <- flights |> 
+  group_by(year, month, day) |> 
+  summarise(delay = mean(dep_delay, na.rm = T)) |> 
+  arrange(-delay)
+```
+
+##n()
+```{r}
+df <- data.frame(
+  group = c("A", "B", "A", "B", "A"),
+  score = c(50, 65, 70, 85, NA) )
+
+df_sum <- df |> 
+  group_by(group) |> 
+  summarize(
+    mean_val = mean(score, na.rm = T),
+    n = n() )
+```
+
+##Classwork 11 
+###Q1a
+```{r}
+nyc_dogs <- read_csv('https://bcdanl.github.io/data/nyc_dogs_cleaned.csv')
+
+q1a <- nyc_dogs |> 
+  group_by(breed) |> 
+  summarise(n = n()) |> 
+  arrange(-n)
+```
+
+##Q1b
+```{r}
+q1a_top5 <- q1a |> 
+  filter(!is.na(breed)) |> 
+  mutate(ranking = dense_rank(-n)) |> 
+  filter(ranking <= 5)
+```
+
+
+##Lecture 23
+###Practice
+```{r}
+library(nycflights13)
+```
+
+#ungroup
+```{r}
+daily <- flights |> 
+  group_by(year, month, day)
+
+by_day <- daily |> 
+  summarize(flights = n())
+
+
+```
+
+#Count
+```{r}
+n_dest <- flights |> 
+  count(dest) |> 
+  arrange(-n)
+```
+
+```{r}
+ggplot(diamonds) +
+  geom_histogram(aes(x = carat),
+                 binwidth = .5)
+```
+
+#group_by() with mmultiple variables
+```{r}
+daily <- flights |> 
+  group_by(year, month, day)
+
+per_day <- daily |> 
+  summarize(flights = n())
+
+per_month <- per_day |> 
+  summarize(flights = sum(flights))
+
+per_year  <- per_month |> 
+  summarize(flights = sum(flights))
+```
+
+##Classwork 11
+###Q1a
+```{r}
+top_breeds <- nyc_dogs |> 
+  count(breed) |> 
+  arrange(-n) |> 
+  filter(!is.na(breed)) |> 
+  slice_head(n = 5)
+```
+
+###Q1b
+```{r}
+only_top_5 <- nyc_dogs |> 
+  filter(breed == "yorkshire terrier" |
+           breed == "shih tzu" |
+           breed == "chihuahua" |
+           breed == "labrador" |
+           breed == "pit bull")
+```
+
+```{r}
+
+ggplot(only_top_5, aes(y = breed)) +
+  geom_bar() +
+  facet_wrap(borough ~ .)
+```
+#Q1c
+```{r}
+q1c <- nyc_dogs |> 
+  group_by(borough) |> 
+  count(breed) |> 
+  arrange(borough, -n) |> 
+  filter(!is.na(breed)) |> 
+  slice_max(n, n = 5)
+```
+
+#Q1d
+```{r}
+q1d <- nyc_dogs |> 
+  group_by(gender) |> 
+  count(name)
+  
+```
+
+#Lecture 24
+##Class work 11 cont.
+###Q1e
+
+Find the five most popular dog 'name's for each 'gender' in each 'borough'.
+
+```{r}
+q1e <- nyc_dogs |> 
+  count(borough, gender, name) |> 
+  group_by(borough, gender) |> 
+  slice_max(n, n = 5) |> 
+  filter(!is.na(name)) |> 
+  filter(!is.na(gender))
+```
+
+#Q1f
+```{r}
+nyc_dogs <- nyc_dogs |> 
+  mutate(age = 2024 - birth_year)
+
+ggplot(nyc_dogs, aes(x = age)) +
+  geom_histogram()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
