@@ -1,0 +1,142 @@
+---
+title: "Beer Markets"
+author: "Sarah Bhasin"
+date: "2024-05-15"
+categories: [beer, code, data analysis]
+image: "image.png"
+
+execute: 
+  warning: false
+  message: false
+  code-tools: true
+  
+toc: true
+
+format: 
+  html: default
+  ipynb: default
+format-links: [ipynb]
+
+---
+```{r}
+#| include: false
+
+library(knitr)
+library(rmarkdown)
+library(tidyverse)
+library(skimr)
+library(ggthemes)
+library(hrbrthemes)
+
+theme_set(theme_ipsum()+
+          theme(strip.background =element_rect(fill="lightgray"),
+                axis.title.x  = element_text(angle = 0,
+                                            size = rel(1.5),
+                                            margin = margin(10,0,0,0)),
+                axis.title.y  = element_text(angle = 0,
+                                            size = rel(1.5),
+                                            margin = margin(0,10,0,0))
+                )
+          )
+```
+
+Let's analyze the `beer_data` data:
+
+```{r}
+beer_markets <- read_csv("https://bcdanl.github.io/data/beer_markets_all.csv")
+```
+
+
+```{r}
+#| results: asis
+rmarkdown::paged_table(beer_data) 
+```
+
+
+
+## Variable Description for `beer_data` data.frame
+
+The following describes the variables in the `beer_data` data.frame.
+- `hh`: Household identifier
+- `_purchase_desc`: Description of the purchase
+- `quantity`: The quantity of beer purchased
+- `brand`: The brand of beer
+- `dollar_spent`: The amount spent
+- `beer_floz`: Fluid ounces of beer
+- `price_per_floz`: Price per fluid ounce
+- `container`: Type of container
+- `promo`: Whether the purchase was on promotion
+- `market`: The market where the purchase was made
+- `state`: US State
+demographic data:  including gender, marital status, household income, class of work, race, education, age, the size of household, and whether or not the household has a microwave or a dishwasher.
+
+
+
+## State and brand 
+
+
+```{r}
+state_total <- beer_markets |>
+  group_by(state) |>
+  summarise(total_quantity = sum(quantity))
+highest_consumption <- state_total |>
+  arrange(desc(total_quantity)) |>
+  slice(1:5)
+
+ggplot(highest_consumption, aes(x = state, y = total_quantity)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Total Beer Consumption by State",
+       x = "State",
+       y = "Total Quantity") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+The visualizations above depicts the total quantity of beer purchased in the 5 states with the highest quantity of beer purchased.This shows which states tend to be buy more beer, an important thing for a company to know when allocating their marketing efforts and resources. According to the bar chart, Florida is the state with the highest quantity of beer purchased.A company may use this knowledge to allocate more inventory to warehouses in Florida/tailor their marketing efforts to those in Florida.  
+
+Next, we want to see the most popular beer brands in the U.S. across all states by their quantity
+
+```{r}
+state_brand_total <- beer_markets|>
+  group_by(state, brand) |>
+  summarise(total_quantity = sum(quantity)) |>
+  ungroup() |>
+  arrange(desc(total_quantity))
+
+# Calculate total beer consumption by brand across all states (national level)
+national_brand_total <- state_brand_total |>
+  group_by(brand) |>
+  summarise(total_quantity_national = sum(total_quantity)) |>
+  ungroup() |>
+  arrange(desc(total_quantity_national))
+
+ggplot(national_brand_total, aes(x = reorder(brand, total_quantity_national), y = total_quantity_national)) +
+  geom_bar(stat = "identity", fill = "yellow") +
+  labs(title = "National Total Quantity by Brand",
+       x = "Brand",
+       y = "Total Quantity") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+This chart shows the top 5 brands that yield the most demand across all states. As we can see, Bud Light is the beer brand in this data set with the highest quantity purchased across all the states. 
+
+Additionally, the state_brand_total data frame shows us the top beer companies in the top 5 states provided earlier. The results are
+Florida: Natural Light
+Texas: Natural Light
+California: Bud Light
+Ohio: Miller lite 
+North Carolina: Bud Light 
+
+This will tell a company interested in entering those specific states who their top competitors will be. 
+
+```
+
+
+
+
+
+
+
+
+

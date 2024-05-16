@@ -1,7 +1,0 @@
-"0","df <- data.frame("
-"0","  grade = c(""A"", ""A"", ""B"", ""B"", ""C""),"
-"0","  score = c(100, 96, 85, 83, 76))"
-"0",""
-"0","df_filter <- df |> "
-"0","  group_by(grade) |> "
-"0","  filter(n() < 2)"

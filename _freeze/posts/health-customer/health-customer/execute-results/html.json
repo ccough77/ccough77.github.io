@@ -1,0 +1,14 @@
+{
+  "hash": "ed3e3c69a8d7b4a8833ed9826f569b9e",
+  "result": {
+    "markdown": "---\ntitle: \"Health Customer\"\nauthor: \"Conor Coughlin\"\ndate: \"2024-04-29\"\ncategories: [r, tidyverse, data analysis, health-customer]\nimage: \"architecture\"\n\nexecute: \n  warning: false\n  message: false\n  \ntoc: true\n---\n\n\n\n\nLet's analyze the `health_customer` data:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nhealth_cust <- read_csv('https://bcdanl.github.io/data/custdata_rev.csv')\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

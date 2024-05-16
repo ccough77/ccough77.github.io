@@ -1,4 +1,0 @@
-"0","#| echo: false"
-"0","#| eval: true"
-"0","#| results: asis"
-"0","rmarkdown::paged_table(climate_finance) "

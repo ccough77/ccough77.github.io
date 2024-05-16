@@ -1,0 +1,11 @@
+"0","beer_markets <- read_csv(""https://bcdanl.github.io/data/beer_markets_all.csv"")
+"
+"2","[1mRows: [22m[34m73115[39m [1mColumns: [22m[34m25[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m───────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (14): _purchase_desc, brand, container, market, state, buyertype, income, age, employment, degree, ...
+[32mdbl[39m  (5): hh, quantity, dollar_spent, beer_floz, price_per_floz
+[33mlgl[39m  (6): promo, childrenUnder6, children6to17, microwave, dishwasher, singlefamilyhome"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."

@@ -1,7 +1,0 @@
-"0","Most_popular <- spotify_all |> "
-"0","  group_by(artist_name, track_name) |>"
-"0","  count(artist_name, track_name) |> "
-"0","  arrange(-n) "
-"0",""
-"0","Top_10 <- Most_popular |> "
-"0","  filter(n > 101)"

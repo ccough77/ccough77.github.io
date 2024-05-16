@@ -1,0 +1,7 @@
+"0","Floz_to_price <- beer_markets |> "
+"0","  select(beer_floz, price_per_floz) |> "
+"0","  mutate("
+"0","    beer_price_per_floz = beer_floz * price_per_floz) |> "
+"0","  arrange(-beer_price_per_floz)"
+"0",""
+"0","#In this it shows up what the price of a beer would be by the cost per fl. oz"

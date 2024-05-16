@@ -1,5 +1,0 @@
-"0","q2c <- climate_finance |> "
-"0","  group_by(Party) |> "
-"0","  filter(Status == ""provided"") |> "
-"0","  filter(`Type of support` == ""mitigation"") |> "
-"0","  summarize(sum(Contribution))"

@@ -1,4 +1,0 @@
-"0","Q1b <- restaurant |> "
-"0","  select(GRADE, "
-"0","         BORO) |> "
-"0","  arrange(GRADE)"
