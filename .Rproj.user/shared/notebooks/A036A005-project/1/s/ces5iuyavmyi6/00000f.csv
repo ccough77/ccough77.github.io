@@ -1,0 +1,26 @@
+"0","skim(beer_markets) |>  "
+"0","  select(-n_missing)"
+"1","── Data Summary ────────────────────────
+"
+"1","                           Values      
+"
+"1","Name                       beer_markets
+"
+"1","Number of rows             73115       
+"
+"1","Number of columns          25          
+"
+"1","_______________________                
+"
+"1","Column type frequency:                 
+"
+"1","  character                14          
+"
+"1","  logical                  6           
+"
+"1","  numeric                  5           
+"
+"1","________________________               
+"
+"1","Group variables            None        
+"

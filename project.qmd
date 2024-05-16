@@ -77,19 +77,10 @@ About this project: The consumption of beer and alcohol is something that is wid
 The Problem:  Though all of the sales are tracked there is never a good way to compare if you are getting a good price, comparing several of these factors would help to show if you are getting the most for your money, or if you are being scammed.
 
 # Data
-
-The data.frame 'beer_markets' shows us purchase history of alcoholic beverages around the United States and what the buyers have in terms of income, stability, and family.
+The data.frame beer_markets shows us purchase history of alcoholic beverages around the United States and what the buyers have in terms of income, stability, and family.
 
 
 ## Summary Statistics
-
-```{r}
-#| results: asis
-#| echo: false
-rmarkdown::paged_table(beer_markets) 
-```
-
-
 ```{r}
 skim(beer_markets) |>  
   select(-n_missing)

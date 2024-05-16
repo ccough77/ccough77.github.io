@@ -1,0 +1,243 @@
+---
+title: DANL Project
+subtitle: "Data-Driven Mastery: Unlocking Business Potential"
+author: 
+  - Name Conor Coughlin
+  - Name Sarah Bhasin
+  - Name Sanu
+  - Name Liam Turner
+
+toc: true
+toc-title: Beer Markets
+toc-depth: 2
+number-sections: true
+
+fig-width: 9
+
+execute:
+  code-tools: true
+  message: false
+  warning: false
+
+from: markdown+emoji
+---
+```{r setup}
+#| include: false
+library(tidyverse)
+library(skimr)
+library(ggthemes)
+library(hrbrthemes)
+
+theme_set(theme_ipsum()+
+          theme(strip.background =element_rect(fill="lightgray"),
+                axis.title.x = 
+                  element_text(angle = 0,
+                               size = rel(1.33),
+                               margin = margin(10,0,0,0)),
+                axis.title.y = 
+                  element_text(angle = 0,
+                               size = rel(1.33),
+                               margin = margin(0,10,0,0))
+                )
+          )
+```
+
+```{r}
+beer_markets <- read_csv("https://bcdanl.github.io/data/beer_markets_all.csv")
+```
+
+
+## Variable Description for `beer_data` data.frame
+
+The following describes the variables in the `beer_data` data.frame.
+- `hh`: Household identifier
+- `_purchase_desc`: Description of the purchase
+- `quantity`: The quantity of beer purchased
+- `brand`: The brand of beer
+- `dollar_spent`: The amount spent
+- `beer_floz`: Fluid ounces of beer
+- `price_per_floz`: Price per fluid ounce
+- `container`: Type of container
+- `promo`: Whether the purchase was on promotion
+- `market`: The market where the purchase was made
+- `state`: US State
+demographic data:  including gender, marital status, household income, class of work, race, education, age, the size of household, and whether or not the household has a microwave or a dishwasher.
+
+
+# Introduction
+
+About this project: The consumption of beer and alcohol is something that is widely shown through the United States to be a past time of many that live there, through this we could potentially tell what household drinks more and which drinks less.
+
+<br><br>
+
+The Problem:  Though all of the sales are tracked there is never a good way to compare if you are getting a good price, comparing several of these factors would help to show if you are getting the most for your money, or if you are being scammed.
+
+# Data
+
+The data.frame 'beer_markets' shows us purchase history of alcoholic beverages around the United States and what the buyers have in terms of income, stability, and family.
+
+
+## Summary Statistics
+
+```{r}
+#| results: asis
+#| echo: false
+rmarkdown::paged_table(beer_markets) 
+```
+
+
+```{r}
+skim(beer_markets) |>  
+  select(-n_missing)
+```
+
+
+##Beer_floz to price_per_floz
+The following histogram shows how the distribution of 'price_per_floz' varies by 'beer_floz'.
+
+
+```{r}
+ggplot(beer_markets, aes(x = price_per_floz)) +
+  geom_histogram(binwidth = 0.01, fill = "Black") +
+  labs(title = "Distribution of Price per fl. oz",
+       x = "Price per fl. oz",
+       y = "Frequency")
+```
+
+```{r}
+ggplot(beer_markets, aes(x = beer_floz)) +
+  geom_histogram(binwidth = 350, fill = "Black") +
+  labs(title = "Distribution of Beer fl. oz",
+       x = "Beer fl. oz",
+       y = "Frequency")
+```
+
+```{r}
+Floz_to_price <- beer_markets |> 
+  select(beer_floz, price_per_floz) |> 
+  mutate(
+    beer_price_per_floz = beer_floz * price_per_floz) |> 
+  arrange(-beer_price_per_floz)
+
+#In this it shows up what the price of a beer would be by the cost per fl. oz
+```
+
+
+#Dollar Spent to Quantity
+This will show the amount of money that someone is spending to by a beer or a pack of them depending on the quantity that they are buying
+
+
+```{r}
+ggplot(beer_markets, aes(x = dollar_spent)) +
+  geom_histogram(binwidth = 5, fill = "Black") +
+  labs(title = "Distribution of Dollar Spent on Beer",
+       x = "Dollar Spent",
+       y = "Frequency")
+```
+
+```{r}
+ggplot(beer_markets, aes(x = quantity)) +
+  geom_histogram(binwidth = 1, fill = "Black") +
+  labs(title = "Distribution of Quantity Bought",
+       x = "Quantity",
+       y = "Frequency")
+```
+
+```{r}
+ggplot(beer_markets, aes(x = dollar_spent, y = quantity)) +
+  geom_point(color = "Black", alpha = 0.1) +
+  labs(title = "Dollar Spent vs Quantity",
+       x = "Dollar Spent",
+       y = "Quantity")
+
+#In this scatter plot we can see that it is heavily skewed towards the bottom left, meaning more people buy small amount of beer and that it doesn't cost them a lot of money
+```
+
+
+### State and brand 
+
+
+```{r}
+state_total <- beer_markets |>
+  group_by(state) |>
+  summarise(total_quantity = sum(quantity))
+highest_consumption <- state_total |>
+  arrange(desc(total_quantity)) |>
+  slice(1:5)
+
+ggplot(highest_consumption, aes(x = state, y = total_quantity)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Total Beer Consumption by State",
+       x = "State",
+       y = "Total Quantity") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+The visualizations above depicts the total quantity of beer purchased in the 5 states with the highest quantity of beer purchased.This shows which states tend to be buy more beer, an important thing for a company to know when allocating their marketing efforts and resources. According to the bar chart, Florida is the state with the highest quantity of beer purchased.A company may use this knowledge to allocate more inventory to warehouses in Florida/tailor their marketing efforts to those in Florida.  
+
+Next, we want to see the most popular beer brands in the U.S. across all states by their quantity
+
+```{r}
+state_brand_total <- beer_markets|>
+  group_by(state, brand) |>
+  summarise(total_quantity = sum(quantity)) |>
+  ungroup() |>
+  arrange(desc(total_quantity))
+
+# Calculate total beer consumption by brand across all states (national level)
+national_brand_total <- state_brand_total |>
+  group_by(brand) |>
+  summarise(total_quantity_national = sum(total_quantity)) |>
+  ungroup() |>
+  arrange(desc(total_quantity_national))
+
+ggplot(national_brand_total, aes(x = reorder(brand, total_quantity_national), y = total_quantity_national)) +
+  geom_bar(stat = "identity", fill = "yellow") +
+  labs(title = "National Total Quantity by Brand",
+       x = "Brand",
+       y = "Total Quantity") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+```
+This chart shows the top 5 brands that yield the most demand across all states. As we can see, Bud Light is the beer brand in this data set with the highest quantity purchased across all the states. 
+
+Additionally, the state_brand_total data frame shows us the top beer companies in the top 5 states provided earlier. The results are
+Florida: Natural Light
+Texas: Natural Light
+California: Bud Light
+Ohio: Miller lite 
+North Carolina: Bud Light 
+
+This will tell a company interested in entering those specific states who their top competitors will be. 
+
+
+#Promo and Brand
+This is going to show if the companies selling beer are actually promoting what they are selling 
+
+```{r}
+promotion <- beer_markets |> 
+  group_by(brand) |> 
+  summarise(total_promo = sum(promo))
+
+ggplot(promotion, aes(x = brand, y = total_promo)) +
+  geom_bar(stat = "Identity", fill = "Black") +
+  labs(title = "Total Beer Promo per Company",
+       x = "Brand",
+       y = "Total Promotion") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+
+#Signifcance
+
+Through being able to identify how much people are spending on alcohol and how much they are buying and what their living conditions it could be used to help them and maybe help them realize how much they are truly spending.  We can also identify what households are buying a lot of alcohol, this is important as alcohol can lead to abuse to other people in the household, by keeping track of who is buying what and marking high buyers.
+
+##References
+```{r}
+beer_markets <- read_csv("https://bcdanl.github.io/data/beer_markets_all.csv")
+```
+

@@ -42,6 +42,11 @@ theme_set(theme_ipsum()+
           )
 ```
 
+```{r}
+beer_markets <- read_csv("https://bcdanl.github.io/data/beer_markets_all.csv")
+```
+
+
 ## Variable Description for `beer_data` data.frame
 
 The following describes the variables in the `beer_data` data.frame.

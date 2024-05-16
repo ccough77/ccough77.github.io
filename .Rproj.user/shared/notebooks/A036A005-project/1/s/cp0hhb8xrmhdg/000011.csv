@@ -1,3 +1,0 @@
-"0","#| results: asis"
-"0","#| echo: false"
-"0","rmarkdown::paged_table(beer_markets) "
